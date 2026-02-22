@@ -11,7 +11,9 @@ export type Listing = {
   lat: number
   lng: number
   surfaceM2: number
+  rooms: number | null
   imageUrl: string
+  description: string | null
 }
 
 export type GuessResult = {
@@ -93,7 +95,14 @@ export default function App() {
 
       <div style={{ marginBottom: 12 }}>
         <h2 style={{ fontSize: 18 }}>{listing.title}</h2>
-        <p style={{ color: '#555' }}>{listing.city} · {listing.surfaceM2} m²</p>
+        <p style={{ color: '#555', marginBottom: 6 }}>
+          {listing.city} · {listing.surfaceM2} m²{listing.rooms ? ` · ${listing.rooms} pièces` : ''}
+        </p>
+        {listing.description && (
+          <p style={{ fontSize: 13, color: '#777', lineHeight: 1.5 }}>
+            {listing.description.slice(0, 300)}…
+          </p>
+        )}
       </div>
 
       <MapView lat={listing.lat} lng={listing.lng} />
