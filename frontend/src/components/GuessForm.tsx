@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Form, InputGroup } from 'react-bootstrap'
 
 type Props = {
   onSubmit: (price: number) => void
@@ -15,21 +16,25 @@ export default function GuessForm({ onSubmit }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="guess-form">
-      <label className="guess-label">Quel est le prix de ce bien selon vous ?</label>
-      <div className="guess-row">
+    <Form onSubmit={handleSubmit} className="p-3 border-top">
+      <Form.Label className="fw-semibold mb-2">
+        Quel est le prix de ce bien selon vous ?
+      </Form.Label>
+      <InputGroup>
         <span className="guess-prefix">€</span>
-        <input
-          className="guess-input"
+        <Form.Control
           type="number"
-          placeholder="Ex : 250000"
+          placeholder="Ex : 250 000"
           value={value}
           onChange={e => setValue(e.target.value)}
           min={1}
           autoFocus
+          style={{ borderLeft: 'none', borderRadius: '0 6px 6px 0' }}
         />
-        <button type="submit" className="btn-orange">Valider</button>
-      </div>
-    </form>
+        <Button type="submit" className="btn-orange ms-2" style={{ borderRadius: 6 }}>
+          Valider
+        </Button>
+      </InputGroup>
+    </Form>
   )
 }
