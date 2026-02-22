@@ -1,7 +1,5 @@
 [variables]
 COMPOSER_ALLOW_SUPERUSER = "1"
-DATABASE_URL = "mysql://build:build@localhost/build"
-APP_SECRET = "build-time-placeholder"
 
 [phases.install]
 cmds = [
