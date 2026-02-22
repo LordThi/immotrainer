@@ -30,6 +30,7 @@ export default function App() {
   const [totalScore, setTotalScore] = useState(0)
   const [phase, setPhase] = useState<Phase>('loading')
   const [result, setResult] = useState<GuessResult | null>(null)
+  const [descExpanded, setDescExpanded] = useState(false)
 
   const loadListings = async () => {
     setPhase('loading')
@@ -42,9 +43,7 @@ export default function App() {
     setPhase('guessing')
   }
 
-  useEffect(() => {
-    loadListings()
-  }, [])
+  useEffect(() => { loadListings() }, [])
 
   const handleGuess = async (guessPrice: number) => {
     const res = await fetch('/api/guess', {
@@ -64,12 +63,13 @@ export default function App() {
     } else {
       setCurrentIndex(prev => prev + 1)
       setResult(null)
+      setDescExpanded(false)
       setPhase('guessing')
     }
   }
 
   if (phase === 'loading') {
-    return <p style={{ padding: 24 }}>Chargement...</p>
+    return <div className="loading">Chargement des annonces…</div>
   }
 
   if (phase === 'finished') {
@@ -77,40 +77,56 @@ export default function App() {
   }
 
   const listing = listings[currentIndex]
+  const progress = ((currentIndex) / listings.length) * 100
 
   return (
     <div>
-      <header style={{ marginBottom: 16 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700 }}>ImmoTrainer</h1>
-        <p style={{ color: '#666', fontSize: 14 }}>
-          Annonce {currentIndex + 1} / {listings.length} — Score : {totalScore}
-        </p>
+      <header className="header">
+        <span className="header-logo">ImmoTrainer</span>
+        <span className="header-score">
+          Annonce <strong>{currentIndex + 1}</strong> / {listings.length} &nbsp;·&nbsp; Score : <strong>{totalScore}</strong>
+        </span>
       </header>
 
-      <img
-        src={listing.imageUrl}
-        alt={listing.title}
-        style={{ width: '100%', height: 240, objectFit: 'cover', borderRadius: 8, marginBottom: 12 }}
-      />
-
-      <div style={{ marginBottom: 12 }}>
-        <h2 style={{ fontSize: 18 }}>{listing.title}</h2>
-        <p style={{ color: '#555', marginBottom: 6 }}>
-          {listing.city} · {listing.surfaceM2} m²{listing.rooms ? ` · ${listing.rooms} pièces` : ''}
-        </p>
-        {listing.description && (
-          <p style={{ fontSize: 13, color: '#777', lineHeight: 1.5 }}>
-            {listing.description.slice(0, 300)}…
-          </p>
-        )}
+      <div className="progress-bar">
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
       </div>
 
-      <MapView lat={listing.lat} lng={listing.lng} />
+      <div className="card">
+        <div className="listing-image-wrap">
+          <img className="listing-image" src={listing.imageUrl} alt={listing.title} />
+          <span className="listing-badge">{listing.city}</span>
+        </div>
 
-      {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
-      {phase === 'result' && result && (
-        <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
-      )}
+        <div className="listing-info">
+          <h2 className="listing-title">{listing.title}</h2>
+          <div className="listing-tags">
+            <span className="tag">{listing.surfaceM2} m²</span>
+            {listing.rooms && <span className="tag">{listing.rooms} pièces</span>}
+          </div>
+          {listing.description && (
+            <p className="listing-description">
+              {descExpanded ? listing.description : listing.description.slice(0, 280) + '…'}
+              {' '}
+              <button
+                onClick={() => setDescExpanded(v => !v)}
+                style={{ background: 'none', border: 'none', color: 'var(--blue)', fontSize: 13, cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+              >
+                {descExpanded ? 'Réduire' : 'Lire la suite'}
+              </button>
+            </p>
+          )}
+        </div>
+
+        <div className="map-wrap">
+          <MapView lat={listing.lat} lng={listing.lng} />
+        </div>
+
+        {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
+        {phase === 'result' && result && (
+          <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
+        )}
+      </div>
     </div>
   )
 }
