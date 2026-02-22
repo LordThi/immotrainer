@@ -30,6 +30,7 @@ export default function App() {
   const [totalScore, setTotalScore] = useState(0)
   const [phase, setPhase] = useState<Phase>('loading')
   const [result, setResult] = useState<GuessResult | null>(null)
+  const [descExpanded, setDescExpanded] = useState(false)
 
   const loadListings = async () => {
     setPhase('loading')
@@ -62,6 +63,7 @@ export default function App() {
     } else {
       setCurrentIndex(prev => prev + 1)
       setResult(null)
+      setDescExpanded(false)
       setPhase('guessing')
     }
   }
@@ -103,7 +105,16 @@ export default function App() {
             {listing.rooms && <span className="tag">{listing.rooms} pièces</span>}
           </div>
           {listing.description && (
-            <p className="listing-description">{listing.description.slice(0, 280)}…</p>
+            <p className="listing-description">
+              {descExpanded ? listing.description : listing.description.slice(0, 280) + '…'}
+              {' '}
+              <button
+                onClick={() => setDescExpanded(v => !v)}
+                style={{ background: 'none', border: 'none', color: 'var(--blue)', fontSize: 13, cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+              >
+                {descExpanded ? 'Réduire' : 'Lire la suite'}
+              </button>
+            </p>
           )}
         </div>
 
