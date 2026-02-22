@@ -9,44 +9,26 @@ type Props = {
 
 export default function ResultPanel({ result, onNext, isLast }: Props) {
   const { actualPrice, deltaPercent, score } = result
+  const deltaColor = deltaPercent < 10 ? 'var(--green)' : deltaPercent < 25 ? 'var(--orange)' : 'var(--red)'
 
   return (
-    <div style={{
-      marginTop: 16,
-      padding: 20,
-      background: '#fff',
-      borderRadius: 8,
-      border: '1px solid #e5e5e5',
-    }}>
-      <p style={{ fontSize: 14, color: '#666', marginBottom: 4 }}>Prix réel</p>
-      <p style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>
-        {actualPrice.toLocaleString('fr-FR')} €
-      </p>
-
-      <p style={{ fontSize: 14, color: '#666', marginBottom: 4 }}>Écart</p>
-      <p style={{ fontSize: 20, fontWeight: 600, color: deltaPercent < 10 ? '#16a34a' : '#dc2626', marginBottom: 12 }}>
-        {deltaPercent} %
-      </p>
-
-      <p style={{ fontSize: 14, color: '#666', marginBottom: 4 }}>Points gagnés</p>
-      <p style={{ fontSize: 24, fontWeight: 700, color: '#2563eb', marginBottom: 20 }}>
-        + {score}
-      </p>
-
-      <button
-        onClick={onNext}
-        style={{
-          width: '100%',
-          padding: '12px',
-          background: '#1a1a1a',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 6,
-          fontSize: 15,
-          cursor: 'pointer',
-        }}
-      >
-        {isLast ? 'Voir mon score final' : 'Annonce suivante →'}
+    <div className="result-panel">
+      <div className="result-grid">
+        <div className="result-cell">
+          <div className="result-cell-label">Prix réel</div>
+          <div className="result-cell-value">{actualPrice.toLocaleString('fr-FR')} €</div>
+        </div>
+        <div className="result-cell">
+          <div className="result-cell-label">Écart</div>
+          <div className="result-cell-value" style={{ color: deltaColor }}>{deltaPercent} %</div>
+        </div>
+        <div className="result-cell">
+          <div className="result-cell-label">Points</div>
+          <div className="result-cell-value" style={{ color: 'var(--blue)' }}>+{score}</div>
+        </div>
+      </div>
+      <button className="btn-blue" onClick={onNext}>
+        {isLast ? 'Voir mon score final →' : 'Annonce suivante →'}
       </button>
     </div>
   )
