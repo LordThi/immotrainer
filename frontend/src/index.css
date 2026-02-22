@@ -13,8 +13,6 @@ body {
 }
 
 #root {
-  max-width: 760px;
-  margin: 0 auto;
   padding-bottom: 48px;
 }
 
@@ -25,7 +23,7 @@ body {
 }
 
 .map-wrap {
-  height: 200px;
+  height: 260px;
 }
 
 .btn-orange {
