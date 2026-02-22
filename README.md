@@ -42,6 +42,7 @@ Le frontend ne communique jamais directement avec la base de données. Toute la 
 
 ### Frontend
 - **React 18** + **TypeScript** + **Vite**
+- **React-Bootstrap 5** — composants UI (Navbar, Card, Badge, Button, InputGroup…)
 - **Leaflet** — carte interactive avec marker
 - `useState` / `useEffect` uniquement, pas de librairie de state management
 - `fetch` natif, pas de React Query
