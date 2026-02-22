@@ -26,6 +26,7 @@ class ListingController extends AbstractController
             'surfaceM2'   => $l->getSurfaceM2(),
             'rooms'       => $l->getRooms(),
             'imageUrl'    => $l->getImageUrl(),
+            'photos'      => $l->getPhotos() ?? [$l->getImageUrl()],
             'description' => $l->getDescription(),
         ], $listings);
 
