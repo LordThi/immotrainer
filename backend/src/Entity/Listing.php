@@ -37,6 +37,9 @@ class Listing
     #[ORM\Column(length: 500)]
     private string $imageUrl;
 
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $photos = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
@@ -65,6 +68,9 @@ class Listing
 
     public function getImageUrl(): string { return $this->imageUrl; }
     public function setImageUrl(string $imageUrl): static { $this->imageUrl = $imageUrl; return $this; }
+
+    public function getPhotos(): ?array { return $this->photos; }
+    public function setPhotos(?array $photos): static { $this->photos = $photos; return $this; }
 
     public function getDescription(): ?string { return $this->description; }
     public function setDescription(?string $description): static { $this->description = $description; return $this; }
