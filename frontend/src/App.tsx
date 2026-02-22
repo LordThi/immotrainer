@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Badge, Container, ProgressBar } from 'react-bootstrap'
 import MapView from './components/MapView'
 import GuessForm from './components/GuessForm'
 import ResultPanel from './components/ResultPanel'
@@ -69,7 +70,11 @@ export default function App() {
   }
 
   if (phase === 'loading') {
-    return <div className="loading">Chargement des annonces…</div>
+    return (
+      <Container className="text-center text-muted py-5">
+        <p>Chargement des annonces…</p>
+      </Container>
+    )
   }
 
   if (phase === 'finished') {
@@ -77,56 +82,65 @@ export default function App() {
   }
 
   const listing = listings[currentIndex]
-  const progress = ((currentIndex) / listings.length) * 100
+  const progress = (currentIndex / listings.length) * 100
 
   return (
     <div>
-      <header className="header">
-        <span className="header-logo">ImmoTrainer</span>
-        <span className="header-score">
-          Annonce <strong>{currentIndex + 1}</strong> / {listings.length} &nbsp;·&nbsp; Score : <strong>{totalScore}</strong>
-        </span>
-      </header>
+      <nav className="navbar bg-white border-bottom sticky-top mb-3">
+        <Container>
+          <span className="navbar-brand fw-bold text-primary mb-0">ImmoTrainer</span>
+          <span className="text-muted small">
+            Annonce <strong className="text-dark">{currentIndex + 1}</strong> / {listings.length}
+            &nbsp;·&nbsp; Score : <strong className="text-dark">{totalScore}</strong>
+          </span>
+        </Container>
+      </nav>
 
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }} />
-      </div>
+      <ProgressBar now={progress} style={{ height: 3, borderRadius: 0, marginBottom: 16 }} />
 
-      <div className="card">
-        <div className="listing-image-wrap">
-          <img className="listing-image" src={listing.imageUrl} alt={listing.title} />
-          <span className="listing-badge">{listing.city}</span>
-        </div>
-
-        <div className="listing-info">
-          <h2 className="listing-title">{listing.title}</h2>
-          <div className="listing-tags">
-            <span className="tag">{listing.surfaceM2} m²</span>
-            {listing.rooms && <span className="tag">{listing.rooms} pièces</span>}
+      <Container>
+        <div className="card border shadow-sm overflow-hidden">
+          <div style={{ position: 'relative' }}>
+            <img className="listing-image" src={listing.imageUrl} alt={listing.title} />
+            <Badge
+              bg="dark"
+              style={{ position: 'absolute', bottom: 12, left: 12, fontSize: 13, opacity: 0.85 }}
+            >
+              {listing.city}
+            </Badge>
           </div>
-          {listing.description && (
-            <p className="listing-description">
-              {descExpanded ? listing.description : listing.description.slice(0, 280) + '…'}
-              {' '}
-              <button
-                onClick={() => setDescExpanded(v => !v)}
-                style={{ background: 'none', border: 'none', color: 'var(--blue)', fontSize: 13, cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
-              >
-                {descExpanded ? 'Réduire' : 'Lire la suite'}
-              </button>
-            </p>
+
+          <div className="card-body border-bottom">
+            <h2 className="h5 fw-bold mb-2">{listing.title}</h2>
+            <div className="d-flex gap-2 flex-wrap mb-2">
+              <Badge bg="secondary" className="fw-normal">{listing.surfaceM2} m²</Badge>
+              {listing.rooms && <Badge bg="secondary" className="fw-normal">{listing.rooms} pièces</Badge>}
+            </div>
+            {listing.description && (
+              <p className="text-muted small mb-0" style={{ lineHeight: 1.6 }}>
+                {descExpanded ? listing.description : listing.description.slice(0, 280) + '…'}
+                {' '}
+                <button
+                  onClick={() => setDescExpanded(v => !v)}
+                  className="btn btn-link btn-sm p-0"
+                  style={{ fontSize: 13 }}
+                >
+                  {descExpanded ? 'Réduire' : 'Lire la suite'}
+                </button>
+              </p>
+            )}
+          </div>
+
+          <div className="map-wrap">
+            <MapView lat={listing.lat} lng={listing.lng} />
+          </div>
+
+          {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
+          {phase === 'result' && result && (
+            <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
           )}
         </div>
-
-        <div className="map-wrap">
-          <MapView lat={listing.lat} lng={listing.lng} />
-        </div>
-
-        {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
-        {phase === 'result' && result && (
-          <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
-        )}
-      </div>
+      </Container>
     </div>
   )
 }
