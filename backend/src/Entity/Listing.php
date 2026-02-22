@@ -28,11 +28,17 @@ class Listing
     #[ORM\Column]
     private int $surfaceM2;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $rooms = null;
+
     #[ORM\Column]
     private int $price;
 
     #[ORM\Column(length: 500)]
     private string $imageUrl;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
 
     public function getId(): int { return $this->id; }
 
@@ -51,9 +57,15 @@ class Listing
     public function getSurfaceM2(): int { return $this->surfaceM2; }
     public function setSurfaceM2(int $surfaceM2): static { $this->surfaceM2 = $surfaceM2; return $this; }
 
+    public function getRooms(): ?int { return $this->rooms; }
+    public function setRooms(?int $rooms): static { $this->rooms = $rooms; return $this; }
+
     public function getPrice(): int { return $this->price; }
     public function setPrice(int $price): static { $this->price = $price; return $this; }
 
     public function getImageUrl(): string { return $this->imageUrl; }
     public function setImageUrl(string $imageUrl): static { $this->imageUrl = $imageUrl; return $this; }
+
+    public function getDescription(): ?string { return $this->description; }
+    public function setDescription(?string $description): static { $this->description = $description; return $this; }
 }

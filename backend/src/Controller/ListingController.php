@@ -18,13 +18,15 @@ class ListingController extends AbstractController
         $listings = $repository->findRandom($count);
 
         $data = array_map(fn($l) => [
-            'id'        => $l->getId(),
-            'title'     => $l->getTitle(),
-            'city'      => $l->getCity(),
-            'lat'       => $l->getLat(),
-            'lng'       => $l->getLng(),
-            'surfaceM2' => $l->getSurfaceM2(),
-            'imageUrl'  => $l->getImageUrl(),
+            'id'          => $l->getId(),
+            'title'       => $l->getTitle(),
+            'city'        => $l->getCity(),
+            'lat'         => $l->getLat(),
+            'lng'         => $l->getLng(),
+            'surfaceM2'   => $l->getSurfaceM2(),
+            'rooms'       => $l->getRooms(),
+            'imageUrl'    => $l->getImageUrl(),
+            'description' => $l->getDescription(),
         ], $listings);
 
         return $this->json($data);
