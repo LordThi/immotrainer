@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Badge, Container, ProgressBar } from 'react-bootstrap'
+import { Badge, Col, Container, ProgressBar, Row } from 'react-bootstrap'
 import MapView from './components/MapView'
 import GuessForm from './components/GuessForm'
 import ResultPanel from './components/ResultPanel'
@@ -89,7 +89,7 @@ export default function App() {
   return (
     <div>
       <nav className="navbar bg-white border-bottom sticky-top mb-3">
-        <Container>
+        <Container fluid="xl">
           <span className="navbar-brand fw-bold text-primary mb-0">ImmoTrainer</span>
           <span className="text-muted small">
             Annonce <strong className="text-dark">{currentIndex + 1}</strong> / {listings.length}
@@ -98,42 +98,53 @@ export default function App() {
         </Container>
       </nav>
 
-      <ProgressBar now={progress} style={{ height: 3, borderRadius: 0, marginBottom: 16 }} />
+      <ProgressBar now={progress} style={{ height: 3, borderRadius: 0, marginBottom: 24 }} />
 
-      <Container>
-        <div className="card border shadow-sm overflow-hidden">
-          <PhotoCarousel photos={listing.photos} alt={listing.title} city={listing.city} />
+      <Container fluid="xl" className="px-3">
+        <Row className="g-3 align-items-start">
 
-          <div className="card-body border-bottom">
-            <h2 className="h5 fw-bold mb-2">{listing.title}</h2>
-            <div className="d-flex gap-2 flex-wrap mb-2">
-              <Badge bg="secondary" className="fw-normal">{listing.surfaceM2} m²</Badge>
-              {listing.rooms && <Badge bg="secondary" className="fw-normal">{listing.rooms} pièces</Badge>}
+          {/* Colonne gauche — photo + infos */}
+          <Col xs={12} md={8}>
+            <div className="card border shadow-sm overflow-hidden h-100">
+              <PhotoCarousel photos={listing.photos} alt={listing.title} city={listing.city} />
+              <div className="card-body">
+                <h2 className="h5 fw-bold mb-2">{listing.title}</h2>
+                <div className="d-flex gap-2 flex-wrap mb-3">
+                  <Badge bg="secondary" className="fw-normal">{listing.surfaceM2} m²</Badge>
+                  {listing.rooms && <Badge bg="secondary" className="fw-normal">{listing.rooms} pièces</Badge>}
+                  <Badge bg="secondary" className="fw-normal">{listing.city}</Badge>
+                </div>
+                {listing.description && (
+                  <p className="text-muted small mb-0" style={{ lineHeight: 1.6 }}>
+                    {descExpanded ? listing.description : listing.description.slice(0, 300) + '…'}
+                    {' '}
+                    <button
+                      onClick={() => setDescExpanded(v => !v)}
+                      className="btn btn-link btn-sm p-0"
+                      style={{ fontSize: 13 }}
+                    >
+                      {descExpanded ? 'Réduire' : 'Lire la suite'}
+                    </button>
+                  </p>
+                )}
+              </div>
             </div>
-            {listing.description && (
-              <p className="text-muted small mb-0" style={{ lineHeight: 1.6 }}>
-                {descExpanded ? listing.description : listing.description.slice(0, 280) + '…'}
-                {' '}
-                <button
-                  onClick={() => setDescExpanded(v => !v)}
-                  className="btn btn-link btn-sm p-0"
-                  style={{ fontSize: 13 }}
-                >
-                  {descExpanded ? 'Réduire' : 'Lire la suite'}
-                </button>
-              </p>
-            )}
-          </div>
+          </Col>
 
-          <div className="map-wrap">
-            <MapView lat={listing.lat} lng={listing.lng} />
-          </div>
+          {/* Colonne droite — carte + formulaire/résultat */}
+          <Col xs={12} md={4}>
+            <div className="card border shadow-sm overflow-hidden">
+              <div className="map-wrap">
+                <MapView lat={listing.lat} lng={listing.lng} />
+              </div>
+              {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
+              {phase === 'result' && result && (
+                <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
+              )}
+            </div>
+          </Col>
 
-          {phase === 'guessing' && <GuessForm onSubmit={handleGuess} />}
-          {phase === 'result' && result && (
-            <ResultPanel result={result} onNext={handleNext} isLast={currentIndex + 1 >= listings.length} />
-          )}
-        </div>
+        </Row>
       </Container>
     </div>
   )
