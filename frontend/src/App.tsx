@@ -4,6 +4,7 @@ import MapView from './components/MapView'
 import GuessForm from './components/GuessForm'
 import ResultPanel from './components/ResultPanel'
 import FinalScreen from './components/FinalScreen'
+import PhotoCarousel from './components/PhotoCarousel'
 
 export type Listing = {
   id: number
@@ -14,6 +15,7 @@ export type Listing = {
   surfaceM2: number
   rooms: number | null
   imageUrl: string
+  photos: string[]
   description: string | null
 }
 
@@ -100,15 +102,7 @@ export default function App() {
 
       <Container>
         <div className="card border shadow-sm overflow-hidden">
-          <div style={{ position: 'relative' }}>
-            <img className="listing-image" src={listing.imageUrl} alt={listing.title} />
-            <Badge
-              bg="dark"
-              style={{ position: 'absolute', bottom: 12, left: 12, fontSize: 13, opacity: 0.85 }}
-            >
-              {listing.city}
-            </Badge>
-          </div>
+          <PhotoCarousel photos={listing.photos} alt={listing.title} city={listing.city} />
 
           <div className="card-body border-bottom">
             <h2 className="h5 fw-bold mb-2">{listing.title}</h2>
