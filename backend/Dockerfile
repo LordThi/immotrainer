@@ -17,3 +17,11 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+COPY . .
+RUN composer dump-autoload --optimize --no-dev
+
+CMD php -S 0.0.0.0:${PORT:-8080} -t public/
