@@ -27,6 +27,8 @@ export type GuessResult = {
 
 type Phase = 'loading' | 'guessing' | 'result' | 'finished'
 
+const API = import.meta.env.VITE_API_URL ?? ''
+
 export default function App() {
   const [listings, setListings] = useState<Listing[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -40,7 +42,7 @@ export default function App() {
     setCurrentIndex(0)
     setTotalScore(0)
     setResult(null)
-    const res = await fetch('/api/listings/random?count=5')
+    const res = await fetch(`${API}/api/listings/random?count=5`)
     const data = await res.json()
     setListings(data)
     setPhase('guessing')
@@ -49,12 +51,12 @@ export default function App() {
   useEffect(() => { loadListings() }, [])
 
   const handleGuess = async (guessPrice: number) => {
-    const res = await fetch('/api/guess', {
+    const res = await fetch(`${API}/api/guess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ listingId: listings[currentIndex].id, guessPrice }),
     })
-    const data: GuessResult = await res.json()
+    const data = await res.json() as GuessResult
     setResult(data)
     setTotalScore(prev => prev + data.score)
     setPhase('result')
