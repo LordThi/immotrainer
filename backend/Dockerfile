@@ -24,4 +24,4 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 COPY . .
 RUN composer dump-autoload --optimize --no-dev
 
-CMD php -S 0.0.0.0:${PORT:-8080} -t public/
+CMD php -S 0.0.0.0:${PORT:-8080} -t /app/public/
