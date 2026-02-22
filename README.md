@@ -59,8 +59,9 @@ Le frontend ne communique jamais directement avec la base de données. Toute la 
 # Démarrer tous les services
 docker compose up
 
-# Charger les données de test (première fois)
+# Charger les données (première fois)
 docker compose run --rm backend php bin/console doctrine:fixtures:load
+# 96 vraies annonces de Hyères et Toulon (scrapées depuis Bien'ici)
 ```
 
 - Frontend : http://localhost:5173
@@ -83,7 +84,9 @@ Retourne N annonces aléatoires **sans le prix**.
     "lat": 43.12,
     "lng": 6.13,
     "surfaceM2": 75,
-    "imageUrl": "https://..."
+    "rooms": 3,
+    "imageUrl": "https://...",
+    "description": "Magnifique appartement..."
   }
 ]
 ```
@@ -121,11 +124,18 @@ score        = max(0, 1000 * (1 - delta))
 
 ---
 
+## Données
+
+Les annonces proviennent d'un scraping de **Bien'ici** (via reverse-engineering de leur API interne) sur les villes de **Hyères** et **Toulon**. Les photos sont hébergées directement sur les serveurs des agences immobilières (Capifrance, IAD, etc.).
+
+---
+
 ## Axes d'amélioration
 
+- **Refresh automatique des données** — relancer le scraping périodiquement pour garder les annonces fraîches
+- **Nouvelles villes** — étendre le jeu à d'autres marchés immobiliers
 - **Mode daily** — une partie par jour avec les mêmes annonces pour tous
 - **Leaderboard** — classement des meilleurs scores
 - **Authentification** — pour sauvegarder l'historique des parties
-- **Vraies annonces** — intégration d'une API immobilière (SeLoger, PAP)
 - **Nginx** — remplacer le serveur PHP built-in pour la production
 - **Tests** — PHPUnit côté backend, Vitest côté frontend
