@@ -40,7 +40,7 @@ export default function MapView({ lat, lng }: Props) {
   return (
     <div
       ref={containerRef}
-      style={{ height: 220, borderRadius: 8, marginBottom: 16, overflow: 'hidden' }}
+      style={{ height: 260, borderRadius: 8, marginBottom: 16, overflow: 'hidden' }}
     />
   )
 }
