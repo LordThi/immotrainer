@@ -15,35 +15,21 @@ export default function GuessForm({ onSubmit }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: 16, display: 'flex', gap: 8 }}>
-      <input
-        type="number"
-        placeholder="Votre estimation en €"
-        value={value}
-        onChange={e => setValue(e.target.value)}
-        min={1}
-        style={{
-          flex: 1,
-          padding: '10px 14px',
-          fontSize: 16,
-          border: '1px solid #ccc',
-          borderRadius: 6,
-        }}
-      />
-      <button
-        type="submit"
-        style={{
-          padding: '10px 20px',
-          background: '#2563eb',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 6,
-          fontSize: 15,
-          cursor: 'pointer',
-        }}
-      >
-        Valider
-      </button>
+    <form onSubmit={handleSubmit} className="guess-form">
+      <label className="guess-label">Quel est le prix de ce bien selon vous ?</label>
+      <div className="guess-row">
+        <span className="guess-prefix">€</span>
+        <input
+          className="guess-input"
+          type="number"
+          placeholder="Ex : 250000"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          min={1}
+          autoFocus
+        />
+        <button type="submit" className="btn-orange">Valider</button>
+      </div>
     </form>
   )
 }
