@@ -1,4 +1,4 @@
-# Railway build config
+# Railway build config — forces rebuild
 [variables]
 COMPOSER_ALLOW_SUPERUSER = "1"
 
