@@ -1,3 +1,4 @@
+# Railway build config
 [variables]
 COMPOSER_ALLOW_SUPERUSER = "1"
 
